@@ -5,17 +5,15 @@
 #include <iomanip>
 #include <sstream>
 
+std::vector<std::string> split(const std::string& str, char delimiter);
+
 void run(std::istream& in, std::ostream& out){
   using namespace std::literals;
   // read movies from file
   std::ifstream movieStream{"movies.csv"};
   std::map<int, std::vector<std::string>> movies{};
   for (std::string line; std::getline(movieStream, line);) {
-    std::vector<std::string> movie;
-    for (size_t first=0, last=0; last < line.length(); first=last+1) {
-      last = line.find(';', first);
-      movie.push_back(line.substr(first, last-first));
-    }
+    std::vector<std::string> movie = split(line, ';');
     movies.insert(std::make_pair(std::stoi(movie[0]), movie));
     out << movie[0] << ": " << movie[1] << "\n";
   }
@@ -35,11 +33,7 @@ void run(std::istream& in, std::ostream& out){
     if (input.empty()) {
       break;
     }
-    std::vector<std::string> rental;
-    for (size_t first=0, last=0; last < input.length(); first=last+1) {
-      last = input.find(' ', first);
-      rental.push_back(input.substr(first, last-first));
-    }
+    std::vector<std::string> rental = split(input, ' ');
     std::vector<std::string> movie = movies[std::stoi(rental[0])];
     double thisAmount = 0;
     int daysRented = std::stoi(rental[1]);
@@ -72,4 +66,13 @@ void run(std::istream& in, std::ostream& out){
   result << "You earned " << frequentRenterPoints << " frequent renter points\n";
 
   out << result.str();
+}
+
+std::vector<std::string> split(const std::string& str, char delimiter) {
+  std::vector<std::string> strings;
+  for (size_t first=0, last=0; last < str.length(); first=last+1) {
+    last = str.find(delimiter, first);
+    strings.push_back(str.substr(first, last-first));
+  }
+  return strings;
 }
