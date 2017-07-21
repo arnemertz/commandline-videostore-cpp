@@ -5,17 +5,25 @@
 #include <iomanip>
 #include <sstream>
 
+struct Movie {
+  int key;
+  std::string name;
+  std::string category;
+};
+
 std::vector<std::string> split(const std::string& str, char delimiter);
 
 void run(std::istream& in, std::ostream& out){
   using namespace std::literals;
   // read movies from file
   std::ifstream movieStream{"movies.csv"};
-  std::map<int, std::vector<std::string>> movies{};
+  std::map<int, Movie> movies{};
   for (std::string line; std::getline(movieStream, line);) {
-    std::vector<std::string> movie = split(line, ';');
-    movies.insert(std::make_pair(std::stoi(movie[0]), movie));
-    out << movie[0] << ": " << movie[1] << "\n";
+    std::vector<std::string> movieData = split(line, ';');
+    int key = std::stoi(movieData[0]);
+    Movie movie{key, movieData[1], movieData[2]};
+    movies.insert(std::make_pair(key, movie));
+    out << movie.key << ": " << movie.name << "\n";
   }
   out << "Enter customer name: ";
   std::string customerName;
@@ -34,17 +42,19 @@ void run(std::istream& in, std::ostream& out){
       break;
     }
     std::vector<std::string> rental = split(input, ' ');
-    std::vector<std::string> movie = movies[std::stoi(rental[0])];
+    auto key = std::stoi(rental[0]);
+    auto const& movie = movies[key];
     double thisAmount = 0;
     int daysRented = std::stoi(rental[1]);
     //determine amounts for rental
-    if (movie[2] == "REGULAR") {
+    auto const& category = movie.category;
+    if (category == "REGULAR") {
       thisAmount += 2;
       if (daysRented > 2)
         thisAmount += (daysRented - 2) * 1.5;
-    } else if (movie[2] == "NEW_RELEASE") {
+    } else if (category == "NEW_RELEASE") {
       thisAmount += daysRented * 3;
-    } else if (movie[2] == "CHILDRENS") {
+    } else if (category == "CHILDRENS") {
       thisAmount += 1.5;
       if (daysRented > 3)
         thisAmount += (daysRented - 3) * 1.5;
@@ -53,11 +63,11 @@ void run(std::istream& in, std::ostream& out){
     // add frequent renter points
     frequentRenterPoints++;
     // add bonus for a two day new release rental
-    if (movie[2] == "NEW_RELEASE" && daysRented > 1) {
+    if (category == "NEW_RELEASE" && daysRented > 1) {
       frequentRenterPoints++;
     }
     // show figures for this rental
-    result << "\t" << movie[1] + "\t" << thisAmount << "\n";
+    result << "\t" << movie.name + "\t" << thisAmount << "\n";
     totalAmount += thisAmount;
   }
 
