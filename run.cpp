@@ -1,17 +1,20 @@
 #include "run.h"
+#include "Movie.h"
+#include "Rental.h"
 #include <fstream>
 #include <map>
 #include <vector>
 #include <iomanip>
 #include <sstream>
 
-struct Movie {
-  int key;
-  std::string name;
-  std::string category;
-};
 
 std::vector<std::string> split(const std::string& str, char delimiter);
+
+double getAmount(const Rental& rental);
+
+const std::string& getMovieName(const Rental& rental);
+
+int getFrequentRenterPoints(const Rental& rental);
 
 void run(std::istream& in, std::ostream& out){
   using namespace std::literals;
@@ -41,33 +44,20 @@ void run(std::istream& in, std::ostream& out){
     if (input.empty()) {
       break;
     }
-    std::vector<std::string> rental = split(input, ' ');
-    auto key = std::stoi(rental[0]);
-    auto const& movie = movies[key];
-    double thisAmount = 0;
-    int daysRented = std::stoi(rental[1]);
-    //determine amounts for rental
-    auto const& category = movie.category;
-    if (category == "REGULAR") {
-      thisAmount += 2;
-      if (daysRented > 2)
-        thisAmount += (daysRented - 2) * 1.5;
-    } else if (category == "NEW_RELEASE") {
-      thisAmount += daysRented * 3;
-    } else if (category == "CHILDRENS") {
-      thisAmount += 1.5;
-      if (daysRented > 3)
-        thisAmount += (daysRented - 3) * 1.5;
-    }
+
+    std::vector<std::string> rentalData = split(input, ' ');
+    auto key = std::stoi(rentalData[0]);
+    Movie const& movie = movies[key];
+    int daysRented = std::stoi(rentalData[1]);
+    Rental rental(movie, daysRented);
+
+    //determine amounts for rentaldouble thisAmount;
+    double thisAmount = getAmount(rental);
 
     // add frequent renter points
-    frequentRenterPoints++;
-    // add bonus for a two day new release rental
-    if (category == "NEW_RELEASE" && daysRented > 1) {
-      frequentRenterPoints++;
-    }
+    frequentRenterPoints += getFrequentRenterPoints(rental);
     // show figures for this rental
-    result << "\t" << movie.name + "\t" << thisAmount << "\n";
+    result << "\t" << getMovieName(rental) + "\t" << thisAmount << "\n";
     totalAmount += thisAmount;
   }
 
@@ -76,6 +66,34 @@ void run(std::istream& in, std::ostream& out){
   result << "You earned " << frequentRenterPoints << " frequent renter points\n";
 
   out << result.str();
+}
+
+int getFrequentRenterPoints(const Rental& rental) {
+  int rentalFrequentRentalPoints = 1;
+  // add bonus for a two day new release rental
+  if (rental.getMovie().category == "NEW_RELEASE" && rental.getDaysRented() > 1) {
+      rentalFrequentRentalPoints++;
+    }
+  return rentalFrequentRentalPoints;
+}
+
+const std::string& getMovieName(const Rental& rental) { return rental.getMovie().name; }
+
+double getAmount(const Rental& rental) {
+  double thisAmount = 0;
+  const std::string& category = rental.getMovie().category;
+  if (category == "REGULAR") {
+    thisAmount += 2;
+    if (rental.getDaysRented() > 2)
+      thisAmount += (rental.getDaysRented() - 2) * 1.5;
+  } else if (category == "NEW_RELEASE") {
+    thisAmount += rental.getDaysRented() * 3;
+  } else if (category == "CHILDRENS") {
+    thisAmount += 1.5;
+    if (rental.getDaysRented() > 3)
+      thisAmount += (rental.getDaysRented() - 3) * 1.5;
+  }
+  return thisAmount;
 }
 
 std::vector<std::string> split(const std::string& str, char delimiter) {
