@@ -1,27 +1,19 @@
 #include "run.h"
 #include "Movie.h"
 #include "Rental.h"
-#include <fstream>
-#include <map>
-#include <vector>
+#include "MovieRepository.h"
+#include "SplitString.h"
 #include <iomanip>
 #include <sstream>
 
 
-std::vector<std::string> split(const std::string& str, char delimiter);
-
 void run(std::istream& in, std::ostream& out){
   using namespace std::literals;
-  // read movies from file
-  std::ifstream movieStream{"movies.csv"};
-  std::map<int, Movie> movies{};
-  for (std::string line; std::getline(movieStream, line);) {
-    std::vector<std::string> movieData = split(line, ';');
-    int key = std::stoi(movieData[0]);
-    Movie movie{key, movieData[1], movieData[2]};
-    movies.insert(std::make_pair(key, movie));
+  MovieRepository movieRepository;
+  for (auto const& movie : movieRepository.getAll()) {
     out << movie.key << ": " << movie.name << "\n";
   }
+
   out << "Enter customer name: ";
   std::string customerName;
   getline(in, customerName);
@@ -41,7 +33,7 @@ void run(std::istream& in, std::ostream& out){
 
     std::vector<std::string> rentalData = split(input, ' ');
     auto key = std::stoi(rentalData[0]);
-    Movie const& movie = movies[key];
+    Movie const& movie = movieRepository.getByKey(key);
     int daysRented = std::stoi(rentalData[1]);
     Rental rental(movie, daysRented);
 
@@ -62,11 +54,3 @@ void run(std::istream& in, std::ostream& out){
   out << result.str();
 }
 
-std::vector<std::string> split(const std::string& str, char delimiter) {
-  std::vector<std::string> strings;
-  for (size_t first=0, last=0; last < str.length(); first=last+1) {
-    last = str.find(delimiter, first);
-    strings.push_back(str.substr(first, last-first));
-  }
-  return strings;
-}
