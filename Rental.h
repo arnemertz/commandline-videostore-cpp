@@ -12,6 +12,11 @@ public:
   Rental(const Movie& movie, int daysRented);
   Movie const& getMovie() const { return movie; }
   int getDaysRented() const { return daysRented; }
+
+  int getFrequentRenterPoints() const;
+  const std::string& getMovieName() const;
+  double getAmount() const;
+
 };
 
 
