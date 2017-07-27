@@ -3,15 +3,12 @@
 #include "Rental.h"
 #include "MovieRepository.h"
 #include "RentalFactory.h"
+#include "RentalRecord.h"
 #include <iomanip>
 #include <sstream>
 
 
 std::vector<Rental> inputRentals(std::istream& in, RentalFactory& rentalFactory);
-
-int getFrequentRenterPoints(const std::vector<Rental>& rentals);
-
-double getTotalAmount(const std::vector<Rental>& rentals);
 
 void run(std::istream& in, std::ostream& out){
 
@@ -32,11 +29,13 @@ void run(std::istream& in, std::ostream& out){
   result << "Rental Record for " + customerName + "\n";
 
   std::vector<Rental> rentals = inputRentals(in, rentalFactory);
-  int frequentRenterPoints = getFrequentRenterPoints(rentals);
-  double totalAmount = getTotalAmount(rentals);
+  RentalRecord rentalRecord(customerName, rentals);
+
+  int frequentRenterPoints = rentalRecord.getFrequentRenterPoints();
+  double totalAmount = rentalRecord.getTotalAmount();
 
   // show figures for each rental
-  for (auto const& rental : rentals) {
+  for (auto const& rental : rentalRecord.getRentals()) {
     result << "\t" << rental.getMovieName() + "\t" << rental.getAmount() << "\n";
   }
 
@@ -45,22 +44,6 @@ void run(std::istream& in, std::ostream& out){
   result << "You earned " << frequentRenterPoints << " frequent renter points\n";
 
   out << result.str();
-}
-
-double getTotalAmount(const std::vector<Rental>& rentals) {
-  double totalAmount = 0;
-  for (auto const& rental : rentals) {
-    totalAmount += rental.getAmount();
-  }
-  return totalAmount;
-}
-
-int getFrequentRenterPoints(const std::vector<Rental>& rentals) {
-  int frequentRenterPoints = 0;
-  for (auto const& rental : rentals) {
-    frequentRenterPoints += rental.getFrequentRenterPoints();
-  }
-  return frequentRenterPoints;
 }
 
 std::vector<Rental> inputRentals(std::istream& in, RentalFactory& rentalFactory) {
