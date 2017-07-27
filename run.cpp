@@ -7,6 +7,12 @@
 #include <sstream>
 
 
+std::vector<Rental> inputRentals(std::istream& in, RentalFactory& rentalFactory);
+
+int getFrequentRenterPoints(const std::vector<Rental>& rentals);
+
+double getTotalAmount(const std::vector<Rental>& rentals);
+
 void run(std::istream& in, std::ostream& out){
 
   MovieRepository movieRepository;
@@ -21,28 +27,17 @@ void run(std::istream& in, std::ostream& out){
   getline(in, customerName);
 
   out << "Choose movie by number followed by rental days, just ENTER for bill:\n";
-  double totalAmount = 0;
-  int frequentRenterPoints = 0;
   std::ostringstream result;
   result << std::fixed << std::setprecision(1);
   result << "Rental Record for " + customerName + "\n";
-  while (true) {
-    std::string input;
-    std::getline(in, input);
-    if (input.empty()) {
-      break;
-    }
 
-    Rental rental = rentalFactory.createRental(input);
+  std::vector<Rental> rentals = inputRentals(in, rentalFactory);
+  int frequentRenterPoints = getFrequentRenterPoints(rentals);
+  double totalAmount = getTotalAmount(rentals);
 
-    //determine amounts for rentaldouble thisAmount;
-    double thisAmount = rental.getAmount();
-
-    // add frequent renter points
-    frequentRenterPoints += rental.getFrequentRenterPoints();
-    // show figures for this rental
-    result << "\t" << rental.getMovieName() + "\t" << thisAmount << "\n";
-    totalAmount += thisAmount;
+  // show figures for each rental
+  for (auto const& rental : rentals) {
+    result << "\t" << rental.getMovieName() + "\t" << rental.getAmount() << "\n";
   }
 
   // add footer lines
@@ -50,5 +45,36 @@ void run(std::istream& in, std::ostream& out){
   result << "You earned " << frequentRenterPoints << " frequent renter points\n";
 
   out << result.str();
+}
+
+double getTotalAmount(const std::vector<Rental>& rentals) {
+  double totalAmount = 0;
+  for (auto const& rental : rentals) {
+    totalAmount += rental.getAmount();
+  }
+  return totalAmount;
+}
+
+int getFrequentRenterPoints(const std::vector<Rental>& rentals) {
+  int frequentRenterPoints = 0;
+  for (auto const& rental : rentals) {
+    frequentRenterPoints += rental.getFrequentRenterPoints();
+  }
+  return frequentRenterPoints;
+}
+
+std::vector<Rental> inputRentals(std::istream& in, RentalFactory& rentalFactory) {
+  std::vector<Rental> rentals;
+  while (true) {
+    std::string input;
+    getline(in, input);
+    if (input.empty()) {
+      break;
+    }
+
+    Rental rental = rentalFactory.createRental(input);
+    rentals.push_back(rental);
+  }
+  return rentals;
 }
 
