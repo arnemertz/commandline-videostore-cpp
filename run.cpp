@@ -2,14 +2,16 @@
 #include "Movie.h"
 #include "Rental.h"
 #include "MovieRepository.h"
-#include "SplitString.h"
+#include "RentalFactory.h"
 #include <iomanip>
 #include <sstream>
 
 
 void run(std::istream& in, std::ostream& out){
-  using namespace std::literals;
+
   MovieRepository movieRepository;
+  RentalFactory rentalFactory(movieRepository);
+
   for (auto const& movie : movieRepository.getAll()) {
     out << movie.key << ": " << movie.name << "\n";
   }
@@ -31,11 +33,7 @@ void run(std::istream& in, std::ostream& out){
       break;
     }
 
-    std::vector<std::string> rentalData = split(input, ' ');
-    auto key = std::stoi(rentalData[0]);
-    Movie const& movie = movieRepository.getByKey(key);
-    int daysRented = std::stoi(rentalData[1]);
-    Rental rental(movie, daysRented);
+    Rental rental = rentalFactory.createRental(input);
 
     //determine amounts for rentaldouble thisAmount;
     double thisAmount = rental.getAmount();
