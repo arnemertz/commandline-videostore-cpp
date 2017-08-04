@@ -17,7 +17,7 @@ void Console::printRentalRecord(RentalRecord const& rentalRecord) const {
   out << "Rental Record for " + rentalRecord.getCustomerName() + "\n";
   // show figures for each rental
   for (auto const& rental : rentalRecord.getRentals()) {
-    out << "\t" << rental.getMovieName() + "\t" << rental.getAmount() << "\n";
+    out << "\t" << rental->getMovieName() + "\t" << rental->getAmount() << "\n";
   }
 
   // add footer lines
@@ -27,9 +27,9 @@ void Console::printRentalRecord(RentalRecord const& rentalRecord) const {
   out << "You earned " << frequentRenterPoints << " frequent renter points\n";
 }
 
-std::vector<Rental> Console::inputRentals(RentalFactory& rentalFactory) {
+std::vector<std::unique_ptr<Rental>> Console::inputRentals(RentalFactory& rentalFactory) {
   out << "Choose movie by number followed by rental days, just ENTER for bill:\n";
-  std::vector<Rental> rentals;
+  std::vector<std::unique_ptr<Rental>> rentals;
   while (true) {
     std::string input;
     getline(in, input);
@@ -37,8 +37,8 @@ std::vector<Rental> Console::inputRentals(RentalFactory& rentalFactory) {
       break;
     }
 
-    Rental rental = rentalFactory.createRental(input);
-    rentals.push_back(rental);
+    auto rental = rentalFactory.createRental(input);
+    rentals.push_back(std::move(rental));
   }
   return rentals;
 }

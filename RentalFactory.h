@@ -1,14 +1,14 @@
 #ifndef COMMANDLINE_VIDEOSTORE_CPP_RENTALFACTORY_H
 #define COMMANDLINE_VIDEOSTORE_CPP_RENTALFACTORY_H
 
-
+#include <memory>
 #include "MovieRepository.h"
 
 class RentalFactory {
   MovieRepository const& movieRepository;
 public:
   explicit RentalFactory(MovieRepository const& repository);
-  Rental createRental(const std::string& input);
+  std::unique_ptr<Rental> createRental(const std::string& input);
 };
 
 

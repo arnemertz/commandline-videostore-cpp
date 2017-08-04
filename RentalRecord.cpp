@@ -9,7 +9,7 @@ double getTotalAmount(const std::vector<Rental>& rentals);
 
 int getFrequentRenterPoints(const std::vector<Rental>& rentals);
 
-RentalRecord::RentalRecord(std::string const& customerName, std::vector<Rental> rentals)
+RentalRecord::RentalRecord(std::string const& customerName, std::vector<std::unique_ptr<Rental>> rentals)
   : customerName(customerName)
   , rentals(std::move(rentals))
 {
@@ -18,7 +18,7 @@ RentalRecord::RentalRecord(std::string const& customerName, std::vector<Rental> 
 double RentalRecord::getTotalAmount() const {
   double totalAmount = 0;
   for (auto const& rental : rentals) {
-    totalAmount += rental.getAmount();
+    totalAmount += rental->getAmount();
   }
   return totalAmount;
 }
@@ -26,7 +26,7 @@ double RentalRecord::getTotalAmount() const {
 int RentalRecord::getFrequentRenterPoints() const {
   int frequentRenterPoints = 0;
   for (auto const& rental : rentals) {
-    frequentRenterPoints += rental.getFrequentRenterPoints();
+    frequentRenterPoints += rental->getFrequentRenterPoints();
   }
   return frequentRenterPoints;
 }
