@@ -1,0 +1,290 @@
+/* Basic theme for remark slides */
+
+@font-face {
+    font-family: Hack';
+    src: url('fonts/hack-regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@page {
+  size: 907px 681px;
+  margin: 0;
+}
+
+@media print {
+  .remark-slide-scaler {
+    width: 100% !important;
+    height: 100% !important;
+    transform: scale(1) !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+}
+
+.footnote {
+    position: absolute;
+    bottom: 3em;
+}
+
+* {
+    .box-sizing(border-box);
+}
+*:before,
+*:after {
+    .box-sizing(border-box);
+}
+
+html {
+    font-size: 100%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Helvetica, Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: 'Gill Sans', 'Gill Sans MT', Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    line-height: 1.5;
+    color: #4D4D4D;
+    background-color: #FFFFFF;
+}
+
+.text-white {
+    color: #FFFFFF;
+}
+
+.text-red {
+    color: #F3662E;
+}
+
+a {
+    color: #007a0e;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover, a:focus {
+    color: #007a0e;
+    text-decoration: underline;
+}
+
+a:focus {
+    outline: 3px solid #007a0e;
+    outline-offset: 0;
+    background-color: #007a0e;
+    color: #FFF;
+    text-decoration: none;
+}
+
+ol {
+    padding: 0 0 0 1.5em;
+    margin: 1em 0;
+}
+
+ul {
+    margin: 0.5em 0;
+    padding: 0 0 0 2em;
+}
+
+img {
+    vertical-align: middle;
+    height: 150px;
+    margin: 0 auto 1em;
+    display: inline-block;
+}
+
+.bigimg img {
+    vertical-align: middle;
+    height: 250px;
+    margin: 0 auto 1em;
+    display: block;
+}
+
+
+hr {
+    height: 0;
+    margin: 1em 0;
+    border: 0;
+    border-top: 1px solid #cccccc;
+}
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    border-left: 5px solid #cccccc;
+    padding-left: 1em;
+    margin: 1em -1em;
+    font-style: italic;
+    color: #999999;
+}
+
+.remark-slide-number {
+    font-size: 24px;
+    display: none;
+}
+
+.remark-slide {
+    display: table;
+    box-sizing: border-box;
+}
+
+.remark-slide-content {
+    display: table-cell;
+    padding: 1.5em 1.5em 0.5em 1.5em;
+    font-size: 30px;
+    background-color: #EFEFEF;
+}
+
+table, th, td {
+   border: 1px solid black;
+   border-collapse: collapse;
+   padding: 1px 5px 1px 5px;
+}
+
+.bg-red {
+    background-color: #DFCFCF;
+}
+
+.bg-black {
+    background-color: #000000;
+    color: #DDDDDD;
+}
+
+.logo {
+    padding-top: 9.5em;
+    background-image: url("images/zuehlke-transparent.png");
+    background-size: contain;
+    text-align: center
+}
+
+.logo-1 {
+    background-image: url("images/title.png");
+    background-size: contain;
+}
+
+.title {
+    padding-top: 26px;
+    padding-left: 0.9em;
+    font-size: 2em;
+    text-align: left;
+}
+
+.remark-slide, .image {
+    /*background-color: #C9CFEC;*/
+}
+
+.image {
+    /*background-size: contain;*/
+}
+
+.class-diagram {
+    background-image: url("images/TargetClassDiagram.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 600px;
+}
+
+.remark-slide-content h1 {
+    font-size: 2em;
+    /*color: #007a0e;*/
+    text-align: center;
+}
+
+.remark-slide-content h2 {
+    font-size: 1.75em;
+    /*color: #007a0e;*/
+    text-align: center;
+}
+
+.remark-slide-content h3 {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.remark-slide-content h4 {
+    font-size: 36px;
+}
+
+.remark-slide-content h5 {
+    font-size: 30px;
+}
+
+.remark-slide-content h6 {
+    font-size: 24px;
+}
+
+.remark-slide-content p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.remark-slide-content > :first-child {
+    margin-top: 0;
+}
+
+.remark-slide-content > :last-child {
+    margin-bottom: 0;
+}
+
+.remark-inline-code, .remark-code-line {
+    white-space: normal;
+    background-color: #DDD;
+    color: #000;
+    font-family: Hack, Arial;
+}
+.remark-code-line {
+    /* border: 1px solid #000; */
+    padding: 0 1em;
+}
+
+.hack {
+    color: #000;
+    font-family: Hack, Arial;
+}
+
+
+.highlight, .highlight a {
+    color: #F33;
+    font-weight: bold;
+}
+
+.image:after {
+    content: none
+}
+.image .remark-slide-number {
+    display: none
+}
+
+.small {
+    font-size: 0.8em;
+}
+
+.inline img {
+    max-height: 1em;
+    margin: 0 0 0 0;
+}
+
+.small-code code {
+    font-size: 0.6em;
+}
+
+.emojione {
+    font-size: 8px;
+    margin-bottom: 0;
+    bottom: 12px;
+    opacity: 0.5;
+    position: absolute;
+    right: 20px;
+}
+
+.twitter {
+    font-size: 22px;
+    margin-bottom: 0;
+    bottom: 12px;
+    opacity: 0.7;
+    position: absolute;
+    left: 120px;
+}
