@@ -5,17 +5,20 @@
 #include "Movie.h"
 
 class Rental {
-  Movie const& movie;
-  int daysRented;
 
+protected:
+  int daysRented;
+  Movie const& movie;
 public:
   Rental(const Movie& movie, int daysRented);
   Movie const& getMovie() const { return movie; }
   int getDaysRented() const { return daysRented; }
 
-  int getFrequentRenterPoints() const;
   const std::string& getMovieName() const;
-  double getAmount() const;
+
+  virtual int getFrequentRenterPoints() const = 0;
+
+  virtual double getAmount() const = 0;
 
 };
 

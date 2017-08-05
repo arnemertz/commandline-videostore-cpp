@@ -5,6 +5,9 @@
 #include "run.h"
 #include "RentalFactory.h"
 #include "SplitString.h"
+#include "RegularRental.h"
+#include "NewReleaseRental.h"
+#include "ChildrensRental.h"
 
 
 RentalFactory::RentalFactory(MovieRepository const& repository)
@@ -19,5 +22,14 @@ std::unique_ptr<Rental> RentalFactory::createRental(const std::string& input) {
   Movie const& movie = movieRepository.getByKey(key);
   int daysRented = stoi(rentalData[1]);
 
-  return std::make_unique<Rental>(movie, daysRented);
+  auto const& category = movie.category;
+  if (category == "REGULAR") {
+    return std::make_unique<RegularRental>(movie, daysRented);
+  } else if (category == "NEW_RELEASE") {
+    return std::make_unique<NewReleaseRental>(movie, daysRented);
+  } else if (category == "CHILDRENS") {
+    return std::make_unique<ChildrensRental>(movie, daysRented);
+  }
+
+  throw std::logic_error("unknown category: " + category);
 }
