@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <iomanip>
+#include <sstream>
 
 void run(std::istream& in, std::ostream& out){
   using namespace std::literals;
