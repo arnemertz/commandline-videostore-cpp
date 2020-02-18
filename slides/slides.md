@@ -227,7 +227,7 @@ other control structures with several responsibilities in the body.
 - Holding a `std::vector<Rental>` and `customerName`
 - The `RentalRecord` class should get the following methods:
     - `getTotalAmount()`
-    - `getFrequentRentersPoints()`
+    - `getFrequentRenterPoints()`
     - `getCustomerName()`
 
 - Presentation logic (everthing accessing `in` or `out`) must be kept in `run` for now
